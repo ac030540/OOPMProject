@@ -1,4 +1,4 @@
-package project;
+
 import java.util.Scanner;
 class Main {
 	public static void main(String[] args) {
@@ -25,17 +25,20 @@ class Main {
 			   System.out.println("Select an option to continue:");
 			   System.out.println("1)Insert data of a student.");
 			   System.out.println("2)Edit data of a student.");
-			   System.out.println("3)View attendance of students.");
+			   System.out.println("3)View list of students who have marked their attendance.");
 			   System.out.println("4)Reset the attendance column.");
+			   System.out.println("5)View list of all the students.");
 			   int ch = sc.nextInt();
 			   switch(ch) {
 			   case 1: admin1.insert();
 			   		   break;
 			   case 2: admin1.editDetails();
 			   		   break;
-			   case 3: admin1.display();
+			   case 3: admin1.displayPresent();
 			           break;
 			   case 4: admin1.resetAttendance();
+			   		   break;
+			   case 5: admin1.displayAll();
 			   		   break;
 			   default : System.out.println("Select a valid option.");
 			   }
@@ -45,11 +48,12 @@ class Main {
 		    
 		   
 	    }
+		
 		}
 		
 
 
 
-
 	}
+
 }

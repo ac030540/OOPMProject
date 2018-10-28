@@ -1,4 +1,4 @@
-package project;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.*;
 class admin {
-	private static final String String = null;
+	
 	private int id;
 	private int password;
 	private  String name, branch, year, division, prn;
@@ -18,28 +18,29 @@ class admin {
 			System.out.println("Enter your ID and password: ");
 			id = sc.nextInt();
 		    password = sc.nextInt();
-			if(id!=1234 && password!=1234){
+			if(id!=1234 || password!=1234){
 			System.out.println("Wrong Credentials! Please try again.");
 			valid = -1;
 		    }
 		    else {
 			valid = 1;
 			System.out.println("Successful Login!");
-		    } 
+		   
+		  }
+		
 	    }
+		
 	}
 	public void insert() {
-	      Connection c = null;
-	     
+	    
 	      int detailsCorrect = 0;
-	      Statement stmt = null;
 	      try {
 	    	 Scanner sc = new Scanner(System.in);
-	         Class.forName("org.postgresql.Driver");
-	         c = DriverManager
+	    	 
+	         Connection c = DriverManager
 	            .getConnection("jdbc:postgresql://localhost:5432/Test","ashok","123");
-	         c.setAutoCommit(false);
-	         stmt = c.createStatement();
+	        
+	       
 	         while( detailsCorrect!=1) {
 	         System.out.println("Enter the name of the student:");
 	         name = sc.nextLine();
@@ -61,7 +62,7 @@ class admin {
 	         
 	         String query = "INSERT INTO studentdata(name,prn,year,division,branch,attendance) "
 	            + "VALUES (?,?,?,?,?,0 );";
-	      // create the mysql insert preparedstatement
+	      // create the sql insert preparedstatement
 	         PreparedStatement preparedStmt = c.prepareStatement(query);
 			preparedStmt.setString (1, name);
 	         preparedStmt.setString (2, prn);
@@ -71,81 +72,83 @@ class admin {
 
 	         // execute the preparedstatement
 	         preparedStmt.execute();
-	         stmt.close();
-	         c.commit();
+	    
+	        
 	         c.close();
 	      } catch (Exception e) {
-	         System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-	         System.exit(0);
+	         System.out.println("An exception has occured.");
 	      }
 	      System.out.println("Data scuccessfully recorded!");
 	   }
-	      public void display() {
-	      Connection c = null;
-	      Statement stmt = null;
+	      public void displayPresent() {
+	   
 	      try {
-	         Class.forName("org.postgresql.Driver");
-	         c = DriverManager
+	       
+	        Connection c = DriverManager
 	            .getConnection("jdbc:postgresql://localhost:5432/Test",
 	            "ashok", "123");
-	         c.setAutoCommit(false);
+	        
 
-	         stmt = c.createStatement();
-	         ResultSet rs = stmt.executeQuery( "SELECT * FROM studentdata;" );
+	         Statement stmt = c.createStatement();
+	         String studentName = " Student Name";
+	         String tprn = " PRN ";
+	         String tyear= "  Year ";
+	         String tdivision = " Div ";
+	         String tbranch = " Branch ";
+
+	         System.out.println( "******************* Present students *******************" );
+	         System.out.println( "_______________________________________________________" );
+	         System.out.format( "%21s|%10s|%4s|%4s|%6s|\n", studentName, tprn,tyear, tdivision, tbranch );
+	         System.out.println( "---------------------+----------+-------+-----+--------|" );
+	         System.out.print(" ");
+	         ResultSet rs = stmt.executeQuery( "SELECT * FROM studentdata WHERE attendance='1' ORDER BY prn ASC;" );
 	         while ( rs.next() ) {
 	            String name = rs.getString("name");
 	            String  prn = rs.getString("prn");
 	            String year  = rs.getString("year");
 	            String  division = rs.getString("division");
 	            String branch = rs.getString("branch");
-	            int attendance = rs.getInt("attendance");
-	            System.out.println( "NAME = " + name );
-	            System.out.println( "PRN = " + prn );
-	            System.out.println( "YEAR = " + year );
-	            System.out.println( "DIVISION = " + division );
-	            System.out.println( "BRANCH = " + branch );
-	            System.out.println("ATTENDANCE =" + attendance);
+	            System.out.format(  "%20s|%10s|%7s|%5s|%8s|\n " ,name  , prn , year ,division , branch );
+	            
 	         }
+	        
+	         System.out.println( "____________________|__________|_______|_____|________|" );
 	         rs.close();
 	         stmt.close();
 	         c.close();
 	      } catch ( Exception e ) {
-	         System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-	         System.exit(0);
+	    	  System.out.println("An exception has occured.");
 	      }
-	      System.out.println("Operation done successfully");
+	     
 	   }
 	      public void resetAttendance() {
-		      Connection c = null;
-		      Statement stmt = null;
+		   
 		      try {
-		         Class.forName("org.postgresql.Driver");
-		         c = DriverManager
+		   
+		         Connection c = DriverManager
 		            .getConnection("jdbc:postgresql://localhost:5432/Test",
 		            "ashok", "123");
-		         c.setAutoCommit(false);
+		       
 
-		         stmt = c.createStatement();
+		         Statement stmt = c.createStatement();
 		         String sql = "UPDATE studentdata SET attendance=0;" ;
-		         stmt.executeUpdate(sql);
-		         c.commit();
+		         stmt.execute(sql);
+		    
 		         stmt.close();
 		         c.close();
 		      } catch ( Exception e ) {
-		         System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-		         System.exit(0);
+		    	  System.out.println("An exception has occured.");
 		      }
 		      System.out.println("The attendance of all the students has been reset.");
 		   }
 	      public void editDetails() {
-		      Connection c = null;
-		      Statement stmt = null;
+		      
 		      try {
-		         Class.forName("org.postgresql.Driver");
-		         c = DriverManager
+		   
+		         Connection c = DriverManager
 		            .getConnection("jdbc:postgresql://localhost:5432/Test",
 		            "ashok", "123");
-		         c.setAutoCommit(false);
+		     
 		         Scanner sc = new Scanner(System.in);
 		         System.out.println("Please enter the PRN of the student:");
 		         String pprn = sc.nextLine();
@@ -160,10 +163,10 @@ class admin {
 		         String ndivision = sc.nextLine();
 		         System.out.println("Enter the branch of the student:");
 		         String nbranch = sc.nextLine();
-		         stmt = c.createStatement();
+		         Statement stmt = c.createStatement();
 		         String query = "UPDATE studentdata SET name=?, prn=?, year=?, division=?, branch=? WHERE prn=?;" ;
 		 
-		      // create the mysql insert preparedstatement
+		      // create the sql insert preparedstatement
 		         PreparedStatement preparedStmt = c.prepareStatement(query);
 		         preparedStmt.setString (1, nname);
 		         preparedStmt.setString (2, nprn);
@@ -176,16 +179,56 @@ class admin {
 
 		         // execute the preparedstatement
 		         preparedStmt.execute();
-
-		         c.commit();
+ 
 		         stmt.close();
-		         
+		      
 		         c.close();
 		      } catch (Exception e) {
-		         System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-		         System.exit(0);
+		    	  System.out.println("An exception has occured.");
 		      }
 		      System.out.println("Data scuccessfully recorded!");
+		   }
+	      public void displayAll() {
+	   	   
+		      try {
+		       
+		        Connection c = DriverManager
+		            .getConnection("jdbc:postgresql://localhost:5432/Test",
+		            "ashok", "123");
+		        
+
+		         Statement stmt = c.createStatement();
+		         String studentName = " Student Name";
+		         String tprn = " PRN ";
+		         String tyear= "  Year ";
+		         String tdivision = " Div ";
+		         String tbranch = " Branch ";
+		         String tattendance = "Attendance";
+		         System.out.println( "************************* Student Record **************************" );
+		         System.out.println( "__________________________________________________________________" );
+		         System.out.format( "%21s|%10s|%4s|%4s|%6s|%6s|\n", studentName, tprn,tyear, tdivision, tbranch, tattendance );
+		         System.out.println( "---------------------+----------+-------+-----+--------|----------|" );
+		         System.out.print(" ");
+		         ResultSet rs = stmt.executeQuery( "SELECT * FROM studentdata ORDER BY prn ASC;" );
+		         while ( rs.next() ) {
+		            String name = rs.getString("name");
+		            String  prn = rs.getString("prn");
+		            String year  = rs.getString("year");
+		            String  division = rs.getString("division");
+		            String branch = rs.getString("branch");
+		            int attendance = rs.getInt("attendance");
+		            System.out.format(  "%20s|%10s|%7s|%5s|%8s|%10s|\n " ,name  , prn , year ,division , branch , attendance);
+		            
+		         }
+		        
+		         System.out.println( "____________________|__________|_______|_____|________|__________|" );
+		         rs.close();
+		         stmt.close();
+		         c.close();
+		      } catch ( Exception e ) {
+		    	  System.out.println("An exception has occured.");
+		      }
+		     
 		   }
 
 }
