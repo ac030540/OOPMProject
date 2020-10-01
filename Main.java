@@ -1,5 +1,5 @@
 
-import java.util.Scanner;
+import java.util.*;
 class Main {
 	public static void main(String[] args) {
 		int ch1=-1,mainOption=-1;
